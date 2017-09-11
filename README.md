@@ -1,3 +1,3 @@
-# sails-test
+# FlowTalk
 
 a [Sails](http://sailsjs.org) application
