@@ -20,6 +20,7 @@ module.exports = function login(inputs) {
 		email: inputs.email,
 		password: inputs.password
 	}, function (err, user) {
+		sails.log.debug("login err: ", err);
 		if (err) return res.negotiate(err);
 		if (!user) {
 
@@ -29,9 +30,14 @@ module.exports = function login(inputs) {
 			if (req.wantsJSON || !inputs.invalidRedirect) {
 				return res.badRequest('Invalid username/password combination.');
 			}
-			// Otherwise if this is an HTML-wanting browser, redirect to /login.
-			return res.redirect(inputs.invalidRedirect);
+			// Otherwise if this is an HTML-wanting browser, redirect to /login view with error message.
+			sails.log.debug("Login failed");
+			return res.view('user/login', {
+				response: "Invalid username/password combination."
+			});
 		}
+
+		sails.log.debug("Successfull login");
 
 		// "Remember" the user in the session
 		// Subsequent requests from this user agent will have `req.session.me` set.

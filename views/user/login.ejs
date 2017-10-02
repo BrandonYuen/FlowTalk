@@ -1,4 +1,9 @@
 <h1>Login</h1>
+
+<% if (typeof response !== 'undefined') { %>
+	<p><%= response %></p>
+<% } %>
+
 <form action="/login" method="post">
 
   <label for="email">Your email address?</label>

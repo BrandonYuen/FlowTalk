@@ -54,10 +54,21 @@ module.exports = {
 			email: req.param('email'),
 			password: req.param('password')
 		}, function (err, user) {
-			// res.negotiate() will determine if this is a validation error
-			// or some kind of unexpected server error, then call `res.badRequest()`
-			// or `res.serverError()` accordingly.
-			if (err) return res.negotiate(err);
+
+			if (err){
+				for (var key in err.Errors){
+				    for (var i=0; i < err.Errors[key].length; i++) {
+						sails.log.debug(err.Errors[key][i].message);
+					}
+				}
+				
+				if (err.Errors){
+					return res.view('user/signup', {
+						validationErrors: err.Errors
+					});
+				}
+				return res.negotiate(err);
+			}
 
 			// Go ahead and log this user in as well.
 			// We do this by "remembering" the user in the session.

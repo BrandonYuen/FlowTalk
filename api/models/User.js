@@ -23,6 +23,18 @@ module.exports = {
 		}
 	},
 
+	validationMessages: {
+		password: {
+			required: 'Password is required'
+		},
+
+		email: {
+			required: 'Email is required',
+			email: 'Invalid email',
+			unique: 'Email already registered'
+		}
+	},
+
 
 	/**
 	* Create a new user using the provided inputs,
@@ -36,6 +48,7 @@ module.exports = {
 	*/
 
 	signup: function (inputs, cb) {
+		sails.log.debug("creating user");
 		// Create a user
 		User.create({
 			name: inputs.name,
@@ -58,11 +71,24 @@ module.exports = {
 	*/
 
 	attemptLogin: function (inputs, cb) {
-		// Create a user
+		sails.log.debug("trying user");
+
+		// Find a user
 		User.findOne({
-			email: inputs.email,
-			password: require('bcrypt-nodejs').hashSync(inputs.password)
-		})
-		.exec(cb);
+			email: inputs.email
+		}).exec(function (err, record){
+			//If error
+			if (err) return cb (err);
+			//If no record found with that email, return error
+			if (!record) return cb (err);
+
+			//If password is matching
+			if (require('bcrypt-nodejs').compareSync(inputs.password, record.password)){
+				return cb (err, record);
+			//If password is not matching, return error without user record
+			}else{
+				return cb (err);
+			}
+		});
 	}
 };
