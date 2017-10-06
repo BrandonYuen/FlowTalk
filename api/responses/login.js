@@ -20,7 +20,6 @@ module.exports = function login(inputs) {
 		email: inputs.email,
 		password: inputs.password
 	}, function (err, user) {
-		sails.log.debug("login err: ", err);
 		if (err) return res.negotiate(err);
 		if (!user) {
 

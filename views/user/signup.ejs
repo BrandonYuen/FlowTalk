@@ -1,22 +1,28 @@
 <h1>Signup</h1>
 
-<% for (var key in validationErrors){ %>
-	<% for (var i=0; i < validationErrors[key].length; i++) { %>
-		<p style='color:red'> <%= validationErrors[key][i].message %> </p>
+<% if (typeof(validationErrors) !== 'undefined') { %>
+	<% for (var key in validationErrors) { %>
+		<% for (var i=0; i < validationErrors[key].length; i++) { %>
+			<p style='color:red'> <%= validationErrors[key][i].message %> </p>
+		<% } %>
 	<% } %>
 <% } %>
 
+<head>
+	<title>FlowTalk - Signup</title>
+</head>
+
 <form action="/signup" method="post">
 
-	<label for="name">What is your name?</label>
+	<label for="name">Visible Name</label>
 	<input name="name" type="text"/>
 	<br/>
 
-	<label for="email">What is your email?</label>
+	<label for="email">Email</label>
 	<input name="email" type="text"/>
 	<br/>
 
-	<label for="password">Choose a Password</label>
+	<label for="password">Password</label>
 	<input name="password" type="password"/>
 	<br/>
 

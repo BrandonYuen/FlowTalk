@@ -8,6 +8,11 @@
 module.exports = {
 
 	attributes: {
+		name: {
+			type: 'string',
+			required: true,
+			unique: false
+		},
 		email: {
 			type: 'email',
 			required: true,
@@ -20,18 +25,24 @@ module.exports = {
 		isAdmin: {
 			type: 'boolean',
 			defaultsTo: false
+		},
+		isActive: {
+			type: 'boolean',
+			defaultsTo: true
 		}
 	},
 
 	validationMessages: {
-		password: {
-			required: 'Password is required'
+		name: {
+			required: 'Name is required.'
 		},
-
 		email: {
 			required: 'Email is required',
 			email: 'Invalid email',
 			unique: 'Email already registered'
+		},
+		password: {
+			required: 'Password is required'
 		}
 	},
 

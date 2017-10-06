@@ -1,8 +1,6 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title><%=typeof title == 'undefined' ? 'New Sails App' : title%></title>
-
     <!-- Viewport mobile tag for sensible mobile support -->
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -30,11 +28,56 @@
 
     <!--STYLES-->
     <link rel="stylesheet" href="/styles/importer.css">
+    <link rel="stylesheet" href="/styles/materialize.min.css">
     <!--STYLES END-->
   </head>
 
   <body>
-    <%- body %>
+
+	<style type="text/css">
+		body {
+			display: flex;
+			min-height: 100vh;
+			flex-direction: column;
+		}
+
+		main {
+			flex: 1 0 auto;
+		}
+	</style>
+
+	<header>
+
+		<nav>
+			<div class="nav-wrapper light-blue darken-3">
+				<a href="#" class="brand-logo right">FlowTalk</a>
+				<ul id="nav-mobile" class="left hide-on-med-and-down">
+					<li><a href="login">Login</a></li>
+					<li><a href="signup">Signup</a></li>
+				</ul>
+			</div>
+		</nav>
+
+	</header>
+
+	<main class="grey lighten-4">
+	    <div class="container"><%- body %></div>
+    </main>
+
+    <footer class="page-footer grey darken-2" >
+        <div class="container">
+            <div class="row">
+                <div class="col l4 s12"></div>
+            </div>
+        </div>
+
+        <div class="footer-copyright grey darken-3">
+            <div class="container">
+                © 2017 Brandon Yuen, All rights reserved. <a class="grey-text text-lighten-4 right"
+                    href="https://github.com/BrandonYuen/FlowTalk">Source Code (Github)</a>
+            </div>
+        </div>
+	</footer>
 
 
 
@@ -60,7 +103,7 @@
     -->
 
     <!--TEMPLATES-->
-    
+
     <!--TEMPLATES END-->
 
 
@@ -89,6 +132,8 @@
 
     <!--SCRIPTS-->
     <script src="/js/dependencies/sails.io.js"></script>
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/materialize.min.js"></script>
     <!--SCRIPTS END-->
   </body>
 </html>
