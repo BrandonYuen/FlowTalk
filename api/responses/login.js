@@ -40,6 +40,7 @@ module.exports = function login(inputs) {
 
 		// "Remember" the user in the session
 		// Subsequent requests from this user agent will have `req.session.me` set.
+		req.session.authenticated = true;
 		req.session.me = user.id;
 
 		// If this is not an HTML-wanting browser, e.g. AJAX/sockets/cURL/etc.,

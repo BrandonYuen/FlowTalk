@@ -1,10 +1,9 @@
 module.exports.routes = {
 
 	// HTML Views
-	'/': { view: 'homepage' },
+	'/': 'UserController.homePage',
 	'get /login': { view: 'user/login' },
 	'get /signup': { view: 'user/signup' },
-	'/welcome': { view: 'user/welcome' },
 
 	// Endpoints
 	'post /login': 'UserController.login',

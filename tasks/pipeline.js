@@ -1,15 +1,15 @@
 /**
- * grunt/pipeline.js
- *
- * The order in which your css, javascript, and template files should be
- * compiled and linked from your views and static HTML files.
- *
- * (Note that you can take advantage of Grunt-style wildcard/glob/splat expressions
- * for matching multiple files, and ! in front of an expression to ignore files.)
- *
- * For more information see:
- *   https://github.com/balderdashy/sails-docs/blob/master/anatomy/myApp/tasks/pipeline.js.md
- */
+* grunt/pipeline.js
+*
+* The order in which your css, javascript, and template files should be
+* compiled and linked from your views and static HTML files.
+*
+* (Note that you can take advantage of Grunt-style wildcard/glob/splat expressions
+* for matching multiple files, and ! in front of an expression to ignore files.)
+*
+* For more information see:
+*   https://github.com/balderdashy/sails-docs/blob/master/anatomy/myApp/tasks/pipeline.js.md
+*/
 
 
 // CSS files to inject in order
@@ -17,7 +17,8 @@
 // (if you're using LESS with the built-in default config, you'll want
 //  to change `assets/styles/importer.less` instead.)
 var cssFilesToInject = [
-  'styles/**/*.css'
+	'styles/**/*.css',
+	'styles/importer.css'
 ];
 
 
@@ -25,15 +26,15 @@ var cssFilesToInject = [
 // (uses Grunt-style wildcard/glob/splat expressions)
 var jsFilesToInject = [
 
-  // Load sails.io before everything else
-  'js/dependencies/sails.io.js',
+	// Load sails.io before everything else
+	'js/dependencies/sails.io.js',
 
-  // Dependencies like jQuery, or Angular are brought in here
-  'js/dependencies/**/*.js',
+	// Dependencies like jQuery, or Angular are brought in here
+	'js/dependencies/**/*.js',
 
-  // All of the rest of your client-side js files
-  // will be injected here in no particular order.
-  'js/**/*.js'
+	// All of the rest of your client-side js files
+	// will be injected here in no particular order.
+	'js/**/*.js'
 ];
 
 
@@ -47,7 +48,7 @@ var jsFilesToInject = [
 // templates get spit out to the same file.  Be sure and check out `tasks/README.md`
 // for information on customizing and installing new tasks.
 var templateFilesToInject = [
-  'templates/**/*.html'
+	'templates/**/*.html'
 ];
 
 
@@ -63,23 +64,23 @@ var tmpPath = '.tmp/public/';
 // (i.e. where the other Grunt tasks spit them out, or in some cases, where
 // they reside in the first place)
 module.exports.cssFilesToInject = cssFilesToInject.map(function(cssPath) {
-  // If we're ignoring the file, make sure the ! is at the beginning of the path
-  if (cssPath[0] === '!') {
-    return require('path').join('!.tmp/public/', cssPath.substr(1));
-  }
-  return require('path').join('.tmp/public/', cssPath);
+	// If we're ignoring the file, make sure the ! is at the beginning of the path
+	if (cssPath[0] === '!') {
+		return require('path').join('!.tmp/public/', cssPath.substr(1));
+	}
+	return require('path').join('.tmp/public/', cssPath);
 });
 module.exports.jsFilesToInject = jsFilesToInject.map(function(jsPath) {
-  // If we're ignoring the file, make sure the ! is at the beginning of the path
-  if (jsPath[0] === '!') {
-    return require('path').join('!.tmp/public/', jsPath.substr(1));
-  }
-  return require('path').join('.tmp/public/', jsPath);
+	// If we're ignoring the file, make sure the ! is at the beginning of the path
+	if (jsPath[0] === '!') {
+		return require('path').join('!.tmp/public/', jsPath.substr(1));
+	}
+	return require('path').join('.tmp/public/', jsPath);
 });
 module.exports.templateFilesToInject = templateFilesToInject.map(function(tplPath) {
-  // If we're ignoring the file, make sure the ! is at the beginning of the path
-  if (tplPath[0] === '!') {
-    return require('path').join('!assets/', tplPath.substr(1));
-  }
-  return require('path').join('assets/',tplPath);
+	// If we're ignoring the file, make sure the ! is at the beginning of the path
+	if (tplPath[0] === '!') {
+		return require('path').join('!assets/', tplPath.substr(1));
+	}
+	return require('path').join('assets/',tplPath);
 });

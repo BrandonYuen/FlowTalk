@@ -8,6 +8,13 @@
 module.exports = {
 
 	/**
+	* `UserController.homepage()`
+	*/
+	homePage: function (req, res) {
+		return res.view('user/home');
+	},
+
+	/**
 	* `UserController.login()`
 	*/
 	login: function (req, res) {
@@ -29,7 +36,7 @@ module.exports = {
 
 		// "Forget" the user from the session.
 		// Subsequent requests from this user agent will NOT have `req.session.me`.
-		req.session.me = null;
+		req.session.authenticated = null;
 
 		// If this is not an HTML-wanting browser, e.g. AJAX/sockets/cURL/etc.,
 		// send a simple response letting the user agent know they were logged out
@@ -61,7 +68,7 @@ module.exports = {
 						sails.log.debug(err.Errors[key][i].message);
 					}
 				}
-				
+
 				if (err.Errors){
 					return res.view('user/signup', {
 						validationErrors: err.Errors
@@ -82,7 +89,7 @@ module.exports = {
 			}
 
 			// Otherwise if this is an HTML-wanting browser, redirect to /welcome.
-			return res.redirect('/welcome');
+			return res.redirect('/');
 		});
 	}
 };
