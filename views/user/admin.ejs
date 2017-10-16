@@ -7,4 +7,13 @@
 	<!--STYLES END-->
 </head>
 
-<h1>Admin</h1>
+<h1>Admin Panel</h1>
+<div class="divider"></div>
+<p>Welcome <b><%= user.name %></b>.</p>
+
+
+<% if (typeof(users) !== 'undefined') { %>
+	<% for (var u in users) { %>
+		<div><%= users[u].email %></div>
+	<% } %>
+<% } %>

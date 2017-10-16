@@ -120,7 +120,30 @@ module.exports = {
 		.exec(function (err, user){
 			if (err || !user) return cb (err);
 			else{
+				sails.log.debug("user: ", user);
 				return cb (err, user);
+			}
+		});
+	},
+
+
+
+	/**
+	* Retrieves all users
+	*
+	* @param  {integer}   userId
+	*/
+
+	getAllUsers: function (cb) {
+		sails.log.debug("getAllUsers");
+
+		User.find({})
+		//.limit(20)
+		.exec(function (err, users){
+			if (err || !users) return cb (err);
+			else{
+				sails.log.debug("users: ", users);
+				return cb (err, users);
 			}
 		});
 	}
