@@ -87,11 +87,10 @@ module.exports = {
 		// Find a user
 		User.findOne({
 			email: inputs.email
-		}).exec(function (err, record){
+		})
+		.exec(function (err, record){
 			//If error
-			if (err) return cb (err);
-			//If no record found with that email, return error
-			if (!record) return cb (err);
+			if (err || !record) return cb (err);
 
 			//If password is matching
 			if (require('bcrypt-nodejs').compareSync(inputs.password, record.password)){
@@ -99,6 +98,29 @@ module.exports = {
 			//If password is not matching, return error without user record
 			}else{
 				return cb (err);
+			}
+		});
+	},
+
+
+
+	/**
+	* Retrieves all the data of a single user.
+	*
+	* @param  {integer}   userId
+	*/
+
+	getUserById: function (userId, cb) {
+		sails.log.debug("getUserById: "+userId);
+
+		// Find a user
+		User.findOne({
+			id: userId
+		})
+		.exec(function (err, user){
+			if (err || !user) return cb (err);
+			else{
+				return cb (err, user);
 			}
 		});
 	}

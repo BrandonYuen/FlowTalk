@@ -8,10 +8,37 @@
 module.exports = {
 
 	/**
+	* `UserController.loginPage()`
+	*/
+	loginPage: function (req, res) {
+		if (req.session.authenticated) {
+			return res.redirect('/');
+		}
+		return res.view('user/login');
+	},
+
+	/**
 	* `UserController.homepage()`
 	*/
 	homePage: function (req, res) {
+		// Get user data by id
+		// User.getUserById(req.session.userId, function (err, user) {
+		//     if (err) { return res.negotiate(err); }
+		//     if (!user) { return res.serverError(new Error('Could not find user in session!')); }
+		//
+		// 	return res.view('user/home', {
+		// 		user: user
+		// 	});
+		// });
 		return res.view('user/home');
+	},
+
+
+	/**
+	* `UserController.adminPage()`
+	*/
+	adminPage: function (req, res) {
+		return res.view('user/admin');
 	},
 
 	/**
@@ -80,6 +107,7 @@ module.exports = {
 			// Go ahead and log this user in as well.
 			// We do this by "remembering" the user in the session.
 			// Subsequent requests from this user agent will have `req.session.me` set.
+			req.session.authenticated = true;
 			req.session.me = user.id;
 
 			// If this is not an HTML-wanting browser, e.g. AJAX/sockets/cURL/etc.,

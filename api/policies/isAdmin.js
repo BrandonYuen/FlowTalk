@@ -9,13 +9,13 @@
 */
 module.exports = function(req, res, next) {
 
-	// User is allowed (authenticated), proceed to the next policy,
+	// User is allowed (admin), proceed to the next policy,
 	// or if this is the last policy, the controller
-	if (req.session.authenticated) {
+	if (req.session.isAdmin == true) {
 		return next();
 	}
 
-	// User is not allowed
-	sails.log.debug("Not authenticated, redirecting to login view.");
-	return res.redirect('/login');
+	// User is not permitted
+	sails.log.debug("Not permitted (admin), redirecting to home.");
+	return res.redirect('/');
 };
