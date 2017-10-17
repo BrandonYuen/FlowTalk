@@ -1,12 +1,13 @@
-<h1>Login</h1>
-
-<% if (typeof response !== 'undefined') { %>
-	<p><%= response %></p>
-<% } %>
 
 <head>
 	<title>FlowTalk - Login</title>
 </head>
+
+<h1>Login</h1>
+
+<% if (typeof response !== 'undefined') { %>
+	<div class="row"><span class="left new badge red" data-badge-caption=""><%= response %></span></div>
+<% } %>
 
 <form action="/login" method="post" class="col s12">
     <div class="row">

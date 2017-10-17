@@ -7,13 +7,50 @@
 	<!--STYLES END-->
 </head>
 
-<h1>Admin Panel</h1>
-<div class="divider"></div>
-<p>Welcome <b><%= user.name %></b>.</p>
 
+<div class="row">
+    <div class="col s12">
+		<h1>Admin Panel</h1>
+		<div class="divider"></div>
+		<p>
+			Welcome <b><%= user.name %></b>, to the Admin Panel. <br>
+			Last login: <b><%= utility.timeSince(req.session.lastLogin) %> ago</b>
+		</p>
+	</div>
+</div>
 
-<% if (typeof(users) !== 'undefined') { %>
-	<% for (var u in users) { %>
-		<div><%= users[u].email %></div>
-	<% } %>
-<% } %>
+<div class="row z-depth-2">
+    <div class="col s12 m4 l12">
+		<ul class="pagination center-align">
+			<li class="disabled"><a href="#!"><i class="material-icons">chevron_left</i></a></li>
+			<li class="active"><a href="#!">1</a></li>
+			<li class="waves-effect"><a href="#!">2</a></li>
+			<li class="waves-effect"><a href="#!">3</a></li>
+			<li class="waves-effect"><a href="#!">4</a></li>
+			<li class="waves-effect"><a href="#!">5</a></li>
+			<li class="waves-effect"><a href="#!"><i class="material-icons">chevron_right</i></a></li>
+		</ul>
+
+		<table class="striped">
+			<thead>
+				<tr>
+					<th>Username</th>
+					<th>Email</th>
+					<th>Admin</th>
+				</tr>
+			</thead>
+
+			<tbody>
+				<% if (typeof(users) !== 'undefined') { %>
+					<% for (var u in users) { %>
+						<tr>
+							<td><%= users[u].name %></td>
+							<td><%= users[u].email %></td>
+							<td><%= users[u].isAdmin %></td>
+						</tr>
+					<% } %>
+				<% } %>
+			</tbody>
+		</table>
+	</div>
+</div>

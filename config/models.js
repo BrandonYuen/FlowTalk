@@ -29,6 +29,6 @@ module.exports.models = {
   ***************************************************************************/
   // migrate: 'alter'
 
-    connection: 'localDiskDb',
+    connection: 'mysqlXAMP',
     migrate: 'alter'
 };

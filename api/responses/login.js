@@ -32,7 +32,7 @@ module.exports = function login(inputs) {
 			// Otherwise if this is an HTML-wanting browser, redirect to /login view with error message.
 			sails.log.debug("Login failed");
 			return res.view('user/login', {
-				response: "Invalid username/password combination."
+				response: "Invalid email/password combination."
 			});
 		}
 
@@ -43,6 +43,7 @@ module.exports = function login(inputs) {
 		req.session.authenticated = true;
 		req.session.userId = user.id;
 		req.session.isAdmin = user.isAdmin;
+		req.session.lastLogin = user.lastLogin;
 
 		// If this is not an HTML-wanting browser, e.g. AJAX/sockets/cURL/etc.,
 		// send a 200 response letting the user agent know the login was successful.

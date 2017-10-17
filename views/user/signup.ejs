@@ -3,7 +3,7 @@
 <% if (typeof(validationErrors) !== 'undefined') { %>
 	<% for (var key in validationErrors) { %>
 		<% for (var i=0; i < validationErrors[key].length; i++) { %>
-			<p style='color:red'> <%= validationErrors[key][i].message %> </p>
+			<div class="row"><span class="left new badge red" data-badge-caption=""><%= validationErrors[key][i].message %></span></div>
 		<% } %>
 	<% } %>
 <% } %>

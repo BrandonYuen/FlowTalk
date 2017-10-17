@@ -29,20 +29,23 @@ module.exports = {
 		isActive: {
 			type: 'boolean',
 			defaultsTo: true
+		},
+		lastLogin: {
+			type: 'datetime'
 		}
 	},
 
 	validationMessages: {
 		name: {
-			required: 'Name is required.'
+			required: 'No name specified.'
 		},
 		email: {
-			required: 'Email is required',
-			email: 'Invalid email',
-			unique: 'Email already registered'
+			required: 'No email specified.',
+			email: 'Invalid email.',
+			unique: 'Email already registered.'
 		},
 		password: {
-			required: 'Password is required'
+			required: 'No password specified.'
 		}
 	},
 
@@ -64,7 +67,8 @@ module.exports = {
 		User.create({
 			name: inputs.name,
 			email: inputs.email,
-			password: require('bcrypt-nodejs').hashSync(inputs.password)
+			password: require('bcrypt-nodejs').hashSync(inputs.password),
+			lastLogin: new Date()
 		})
 		.exec(cb);
 	},
@@ -94,7 +98,16 @@ module.exports = {
 
 			//If password is matching
 			if (require('bcrypt-nodejs').compareSync(inputs.password, record.password)){
+
+				//Update lastlogin for user
+				User.update({id:record.id},{lastLogin:new Date()}).exec(function (err, updated){
+					if (err) {return res.serverError(err);}
+
+					sails.log.debug("Updated user ("+record.name+") lastLogin to: ",updated[0].lastLogin);
+				});
+
 				return cb (err, record);
+
 			//If password is not matching, return error without user record
 			}else{
 				return cb (err);
@@ -120,7 +133,7 @@ module.exports = {
 		.exec(function (err, user){
 			if (err || !user) return cb (err);
 			else{
-				sails.log.debug("user: ", user);
+				sails.log.debug("name: ", user.name);
 				return cb (err, user);
 			}
 		});
@@ -134,15 +147,14 @@ module.exports = {
 	* @param  {integer}   userId
 	*/
 
-	getAllUsers: function (cb) {
-		sails.log.debug("getAllUsers");
+	getAllUsers: function (page, limit, cb) {
+		sails.log.debug("getAllUsers, page: ",page, "limit: ", limit);
 
 		User.find({})
-		//.limit(20)
+		.paginate(page, limit)
 		.exec(function (err, users){
 			if (err || !users) return cb (err);
 			else{
-				sails.log.debug("users: ", users);
 				return cb (err, users);
 			}
 		});

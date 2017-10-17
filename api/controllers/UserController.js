@@ -42,8 +42,19 @@ module.exports = {
 		    if (err) { return res.negotiate(err); }
 		    if (!user) { return res.serverError(new Error('Could not find user in session!')); }
 
-			//TODO: Get all users for the admin page (or a part of it using pagination / filters)
-			User.getAllUsers(function (err, users) {
+			//Get the requested page (defaults to 1)
+			if (req.param('page') == undefined) {
+				page = 1;
+			}else {
+				page = req.param('page');
+			}
+
+			//Users per page
+			//TODO: Make option?
+			limit = 10;
+
+			//Get all users for the admin page (or a part of it using pagination / filters)
+			User.getAllUsers(page, limit, function (err, users) {
 			    if (err) { return res.negotiate(err); }
 			    if (!users) { return res.serverError(new Error('No users found!')); }
 
@@ -122,7 +133,7 @@ module.exports = {
 			// We do this by "remembering" the user in the session.
 			// Subsequent requests from this user agent will have `req.session.me` set.
 			req.session.authenticated = true;
-			req.session.me = user.id;
+			req.session.userid = user.id;
 
 			// If this is not an HTML-wanting browser, e.g. AJAX/sockets/cURL/etc.,
 			// send a 200 response letting the user agent know the signup was successful.
