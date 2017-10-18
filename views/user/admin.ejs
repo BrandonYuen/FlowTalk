@@ -1,10 +1,5 @@
 <head>
 	<title>FlowTalk - Admin</title>
-
-	<!--STYLES-->
-	<link rel="stylesheet" href="/styles/importer.css">
-	<link rel="stylesheet" href="/styles/material_icons.css">
-	<!--STYLES END-->
 </head>
 
 
@@ -19,17 +14,9 @@
 	</div>
 </div>
 
-<div class="row z-depth-2">
+<div class="row z-depth-2 grey lighten-3">
     <div class="col s12 m4 l12">
-		<ul class="pagination center-align">
-			<li class="disabled"><a href="#!"><i class="material-icons">chevron_left</i></a></li>
-			<li class="active"><a href="#!">1</a></li>
-			<li class="waves-effect"><a href="#!">2</a></li>
-			<li class="waves-effect"><a href="#!">3</a></li>
-			<li class="waves-effect"><a href="#!">4</a></li>
-			<li class="waves-effect"><a href="#!">5</a></li>
-			<li class="waves-effect"><a href="#!"><i class="material-icons">chevron_right</i></a></li>
-		</ul>
+		<ul id="pagination" class="pagination center-align"></ul>
 
 		<table class="striped">
 			<thead>
@@ -40,17 +27,19 @@
 				</tr>
 			</thead>
 
-			<tbody>
-				<% if (typeof(users) !== 'undefined') { %>
-					<% for (var u in users) { %>
-						<tr>
-							<td><%= users[u].name %></td>
-							<td><%= users[u].email %></td>
-							<td><%= users[u].isAdmin %></td>
-						</tr>
-					<% } %>
-				<% } %>
+			<tbody id="tableBody">
 			</tbody>
 		</table>
 	</div>
 </div>
+
+<!-- Pass local variables on to client-side variables -->
+<script>
+	var pagination = {
+		pageCount: <%= pagination.pageCount %>
+	};
+</script>
+
+<!-- Inject view specific files for client -->
+<% block('localScripts', '<script src="js/materialize-pagination.js"></script>') %>
+<% block('localScripts', '<script src="js/adminPanel.js"></script>') %>

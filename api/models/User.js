@@ -79,10 +79,10 @@ module.exports = {
 	* Check validness of a login using the provided inputs.
 	* But encrypt the password first.
 	*
-	* @param  {Object}   inputs
-	*                     • email    {String}
-	*                     • password {String}
-	* @param  {Function} cb
+	* @param  {Object}   	inputs
+	*                     	• email    {String}
+	*                     	• password {String}
+	* @param  {Function} 	cb
 	*/
 
 	attemptLogin: function (inputs, cb) {
@@ -120,7 +120,8 @@ module.exports = {
 	/**
 	* Retrieves all the data of a single user.
 	*
-	* @param  {integer}   userId
+	* @param  {integer}   	userId
+	* @param  {Function} 	cb
 	*/
 
 	getUserById: function (userId, cb) {
@@ -142,20 +143,44 @@ module.exports = {
 
 
 	/**
-	* Retrieves all users
+	* Retrieves all users, based on page and max users per page (limit)
 	*
-	* @param  {integer}   userId
+	* @param  {integer}   	page
+	* @param  {integer}   	limit
+	* @param  {Function} 	cb
 	*/
 
 	getAllUsers: function (page, limit, cb) {
 		sails.log.debug("getAllUsers, page: ",page, "limit: ", limit);
 
 		User.find({})
-		.paginate(page, limit)
+		.paginate({page: page, limit: limit})
 		.exec(function (err, users){
 			if (err || !users) return cb (err);
 			else{
 				return cb (err, users);
+			}
+		});
+	},
+
+
+
+	/**
+	* Returns count of users and count of pages based on limit
+	*
+	* @param  {integer}   	limit
+	* @param  {Function} 	cb
+	*/
+
+	getCount: function (limit, cb) {
+
+		User.count({})
+		.exec(function (err, amount){
+			if (err || !amount) return cb (err);
+			else{
+				// Calculate amount of pages based on limit (recordsPerPage)
+				pages = amount / limit;
+				return cb (err, amount, pages);
 			}
 		});
 	}

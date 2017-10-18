@@ -33,8 +33,10 @@ var jsFilesToInject = [
 	'js/dependencies/**/*.js',
 
 	// All of the rest of your client-side js files
-	// will be injected here in no particular order.
-	'js/**/*.js'
+	'js/other/materialize.min.js',
+
+	// All remaining js files will be injected here in no particular order.
+	'js/other/**/*.js'
 ];
 
 
