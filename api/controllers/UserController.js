@@ -2,7 +2,6 @@
 * UserController
 *
 * @description :: Server-side logic for managing users
-* @help        :: See http://links.sailsjs.org/docs/controllers
 */
 
 module.exports = {
@@ -30,52 +29,6 @@ module.exports = {
 				user: user
 			});
 		});
-	},
-
-
-	/**
-	* `UserController.adminPage()`
-	*/
-	adminPage: function (req, res) {
-		// If ajax request for data
-		if (req.xhr) {
-			page = req.param('page');
-			limit = 10;
-
-			//Get all users for the admin page (or a part of it using pagination / filters)
-			User.getAllUsers(page, limit, function (err, users) {
-				if (err) { return res.negotiate(err); }
-				if (!users) { return res.serverError(new Error('No users found!')); }
-
-				return res.json({
-					users: users
-				});
-			});
-		}
-
-		else {
-			// Get user data by id
-			User.getUserById(req.session.userId, function (err, user) {
-			    if (err) { return res.negotiate(err); }
-			    if (!user) { return res.serverError(new Error('Could not find user in session!')); }
-
-				limit = 10;
-
-				//Get count of users and pages
-				User.getCount(limit, function (err, userCount, pageCount) {
-					if (err) { return res.negotiate(err); }
-					if (!userCount || !pageCount) { return res.serverError(new Error('No users found!')); }
-
-					return res.view('user/admin', {
-						user: user,
-						pagination: {
-							userCount: userCount,
-							pageCount: pageCount
-						}
-					});
-				});
-			});
-		}
 	},
 
 	/**

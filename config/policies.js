@@ -51,10 +51,13 @@ module.exports.policies = {
 
 	UserController: {
 		'*': 'sessionAuth',
-		adminPage: ['sessionAuth', 'isAdmin'],
 		loginPage : true,
 		login : true,
 		logout : true,
 		signup : true
+	},
+
+	AdminController: {
+		'*': ['sessionAuth', 'isAdmin']
 	}
 };

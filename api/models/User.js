@@ -101,7 +101,7 @@ module.exports = {
 
 				//Update lastlogin for user
 				User.update({id:record.id},{lastLogin:new Date()}).exec(function (err, updated){
-					if (err) {return res.serverError(err);}
+					if (err) {sails.log.error(err);}
 
 					sails.log.debug("Updated user ("+record.name+") lastLogin to: ",updated[0].lastLogin);
 				});
@@ -183,5 +183,31 @@ module.exports = {
 				return cb (err, amount, pages);
 			}
 		});
-	}
+	},
+
+
+
+	/**
+	* Retrieves all users, based on page and max users per page (limit)
+	*
+	* @param  {integer}   	page
+	* @param  {integer}   	limit
+	* @param  {Function} 	cb
+	*/
+
+	updateUserById: function (userId, params, cb) {
+		sails.log.debug("updateUserById, params: ",params);
+
+		//Update lastlogin for user
+		User.update({id:userId},params).exec(function (err, updatedRecords){
+			if (err) {
+				sails.log.error(err);
+				return cb(err);
+			}
+
+			sails.log.debug("Updated user (",userId,")'s isAdmin to:", updatedRecords[0].isAdmin);
+
+			return cb(err, "OK");
+		});
+	},
 };
