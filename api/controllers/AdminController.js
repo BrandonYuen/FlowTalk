@@ -89,7 +89,7 @@ module.exports = {
 			if (!response) { return res.serverError(new Error('Failed to get response from user update!')); }
 
 			return res.json({
-				success: response
+				response: response
 			});
 		});
 	}

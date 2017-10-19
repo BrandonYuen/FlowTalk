@@ -6,7 +6,18 @@ function getUsersByPage(page) {
 		success: function(result) {
 			console.log("ajax result: ", result);
 
+			//Clear table of users (if already loaded)
 			var tableBody = document.getElementById("tableBody");
+			while (tableBody.firstChild) {
+				tableBody.removeChild(tableBody.firstChild);
+			}
+
+			//Show loading
+			var progress = document.getElementById("progress");
+			progress.className = "progress";
+			var indeterminate = document.createElement("div");
+			indeterminate.className = "indeterminate";
+			progress.appendChild(indeterminate);
 
 			//Put new users in table
 			var users = result.users;
@@ -31,25 +42,31 @@ function getUsersByPage(page) {
 					}else {
 						item.innerHTML = '<div class="switch"><label>False<input id="'+users[u].id+' "type="checkbox"><span class="lever"></span>True</label></div>';
 					}
-
-				row.appendChild(item);
+					row.appendChild(item);
 
 					tableBody.appendChild(row);
+
+					//Remove loading bar
+					progress.className = "";
+					while (progress.firstChild) {
+						progress.removeChild(progress.firstChild);
+					}
+
 				}
 			}
 
 			//On click on switch (isAdmin toggle)
 			$(".switch").find("input[type=checkbox]").on("change",function() {
-				console.log("toggling");
 			    var boolean = $(this).prop('checked');
 				var userId = $(this).attr('id');
 
 			     $.ajax({
 					type: 'POST',
 			 		url: window.location.href+"/adminToggle",
-			 		data: {userId: userId, isAdmin: "test"},
+			 		data: {userId: userId, isAdmin: boolean},
 			 		success: function(result) {
-						console.log("result: ", result);
+						if (result.response == "OK"){Materialize.toast('Successfully updated user.', 4000);}
+						else {Materialize.toast('Failed to update user.. :(', 4000);}
 					}
 				});
 			});
@@ -68,12 +85,6 @@ $(document).ready(function() {
 		useUrlParameter: false,
 		//On click on page number
 		onClickCallback: function(requestedPage){
-
-			//Clear table of users (if already loaded)
-			var tableBody = document.getElementById("tableBody");
-			while (tableBody.firstChild) {
-				tableBody.removeChild(tableBody.firstChild);
-			}
 
 			getUsersByPage(requestedPage);
 		}
