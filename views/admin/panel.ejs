@@ -16,6 +16,11 @@
 
 <div class="row z-depth-2 grey lighten-3">
     <div id="userList" class="col s12 m4 l12">
+        <div class="input-field col s12">
+			<i class="material-icons prefix">search</i>
+            <input name="search" id="search" type="search" value=<%= searchWord %>></input> <label for="search">Search</label>
+			<a onclick="searchButton()" class="waves-effect waves-light btn"><b>Search</b></a>
+        </div>
 		<ul id="pagination" class="pagination center-align"></ul>
 		<div id="progress" class="progress"></div>
 
@@ -37,8 +42,10 @@
 <!-- Pass local variables on to client-side variables -->
 <script>
 	var pagination = {
-		pageCount: <%= pagination.pageCount %>
+		pageCount: <%= pagination.pageCount %>,
+		userCount: <%= pagination.userCount %>
 	};
+	var searchWord = "<%= searchWord %>";
 </script>
 
 <!-- Inject view specific files for client -->

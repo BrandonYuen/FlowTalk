@@ -22,12 +22,18 @@ module.exports = {
 
 			limit = 10;
 
+			//Get search word param if set, otherwise default to empty string
+			searchWord = req.param('search') || "";
+			sails.log.debug("searchWord",searchWord);
+
 			//Get count of users and pages for pagination
-			User.getCount(limit, function (err, userCount, pageCount) {
+			User.getCount(searchWord, limit, function (err, userCount, pageCount) {
 				if (err) { return res.negotiate(err); }
-				if (!userCount || !pageCount) { return res.serverError(new Error('No users found!')); }
+
+				sails.log.debug("searchWord after getCount: ", searchWord);
 
 				return res.view('admin/panel', {
+					searchWord: searchWord,
 					user: user,
 					pagination: {
 						userCount: userCount,
@@ -53,15 +59,25 @@ module.exports = {
 
 		//Get data parameters from request
 		page = req.param('page');
+		searchWord = req.param('searchWord');
 		limit = 10; // NOTE: Make limit an configurable option?
 
-		//Get all users for the admin page (or a part of it using pagination / filters)
-		User.getAllUsers(page, limit, function (err, users) {
+		//Get count of users and pages for pagination
+		User.getCount(searchWord, limit, function (err, userCount, pageCount) {
 			if (err) { return res.negotiate(err); }
-			if (!users) { return res.serverError(new Error('No users found!')); }
 
-			return res.json({
-				users: users
+			//Get all users for the admin page (or a part of it using pagination / filters)
+			User.getAllUsers(searchWord, page, limit, function (err, users) {
+				if (err) { return res.negotiate(err); }
+				if (!users) { return res.serverError(new Error('No users found!')); }
+
+				return res.json({
+					users: users,
+					pagination: {
+						userCount: userCount,
+						pageCount: pageCount
+					}
+				});
 			});
 		});
 	},

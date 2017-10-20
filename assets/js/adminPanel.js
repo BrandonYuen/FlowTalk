@@ -2,7 +2,7 @@
 function getUsersByPage(page) {
 	$.ajax({
 		url: window.location.href+"/loadUsersForAdminPanel",
-		data: {page: page},
+		data: {searchWord: searchWord, page: page},
 		success: function(result) {
 			console.log("ajax result: ", result);
 
@@ -21,7 +21,7 @@ function getUsersByPage(page) {
 
 			//Put new users in table
 			var users = result.users;
-			if (typeof(users) !== 'undefined') {
+			if (users.length > 0) {
 				for (var u in users) {
 					var row = document.createElement("tr");
 
@@ -46,13 +46,13 @@ function getUsersByPage(page) {
 
 					tableBody.appendChild(row);
 
-					//Remove loading bar
-					progress.className = "";
-					while (progress.firstChild) {
-						progress.removeChild(progress.firstChild);
-					}
-
 				}
+			}
+
+			//Remove loading bar
+			progress.className = "";
+			while (progress.firstChild) {
+				progress.removeChild(progress.firstChild);
 			}
 
 			//On click on switch (isAdmin toggle)
@@ -74,21 +74,49 @@ function getUsersByPage(page) {
 	});
 }
 
+//Search button
+function searchButton() {
+	//Get search value
+	var searchWord = document.getElementById('search').value;
+	console.log("pressed search button with value: ",searchWord);
+
+	//Reload current page with hidden post form containing new search word
+    var form = document.createElement('form');
+    form.method = 'post';
+    form.action = '';
+    var input = document.createElement('input');
+    input.type = 'hidden';
+    input.name = 'search';
+    input.value = searchWord;
+    form.appendChild(input);
+	document.body.appendChild(form);
+    form.submit();
+}
+
 //On webpage load
 $(document).ready(function() {
-	//Initialize materialize pagination addon
+
+	//Initialize materialize pagination addon (with new pages count)
+	var pageCount = pagination.pageCount;
 	$('#pagination').materializePagination( {
 		align: 'center',
-		lastPage:  pagination.pageCount,
+		lastPage:  pageCount,
 		firstPage:  1,
 		urlParameter: 'page',
 		useUrlParameter: false,
 		//On click on page number
 		onClickCallback: function(requestedPage){
-
 			getUsersByPage(requestedPage);
 		}
 	});
+
+	//Toast after receiving users
+	if (searchWord != ""){
+		if (pagination.userCount <= 0){Materialize.toast('Could not find any users matching "'+searchWord+'".', 4000);}
+		else {Materialize.toast('Found ('+pagination.userCount+') users matching "'+searchWord+'".', 4000);}
+	}else{
+		Materialize.toast('Found ('+pagination.userCount+') total users.', 4000);
+	}
 
 	//Default page
 	getUsersByPage(1);
