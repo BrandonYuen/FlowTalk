@@ -47,28 +47,29 @@
 	</style>
 
 	<header>
-
-		<nav>
-			<div class="nav-wrapper">
-				<a href="#" class="brand-logo center">FlowTalk</a>
-				<ul id="nav-mobile" class="left hide-on-med-and-down">
-					<% if (req.session.authenticated) { %>
-						<li><a href="/"><b>Home</b></a></li>
-						<% if (req.session.isAdmin == true) { %>
-							<li><a href="admin"><b>Admin Panel</b></a></li>
+  		<div class="navbar-fixed">
+			<nav>
+				<div class="nav-wrapper">
+					<a href="#" class="brand-logo center">FlowTalk</a>
+					<ul id="nav-mobile" class="left hide-on-med-and-down">
+						<% if (req.session.authenticated) { %>
+							<li><a href="/"><b>Home</b></a></li>
+							<% if (req.session.isAdmin == true) { %>
+								<li><a href="admin"><b>Admin Panel</b></a></li>
+							<% } %>
+						</ul>
+						<% } else { %>
+							<li><a href="login"><b>Login</b></a></li>
+							<li><a href="signup"><b>Signup</b></a></li>
 						<% } %>
-					</ul>
-					<% } else { %>
-						<li><a href="login"><b>Login</b></a></li>
-						<li><a href="signup"><b>Signup</b></a></li>
+					<% if (req.session.authenticated) { %>
+						<ul class="right hide-on-med-and-down">
+							<li><a href="logout" class="waves-effect waves-light btn"><b>Logout</b> <i class="material-icons right">exit_to_app</i></a></li>
+						</ul>
 					<% } %>
-				<% if (req.session.authenticated) { %>
-					<ul class="right hide-on-med-and-down">
-						<li><a href="logout" class="waves-effect waves-light btn"><b>Logout</b> <i class="material-icons right">exit_to_app</i></a></li>
-					</ul>
-				<% } %>
-			</div>
-		</nav>
+				</div>
+			</nav>
+		</div>
 
 	</header>
 
