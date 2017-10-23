@@ -23,5 +23,26 @@ module.exports = {
 			msg: '~ Connected to "Public". ~',
 			type: 'notification'
 		});
+	},
+
+	message: function(req, res) {
+
+		if (!req.isSocket) {
+			return res.badRequest("Received a non socket request.");
+		}
+
+		// Prepare message data
+		messageData = {
+			msg: ""
+		};
+
+		// Broadcast to other ALL other sockets in room
+		sails.sockets.broadcast('public', 'message', messageData, req);
+
+		// Return connect response
+		return res.json({
+			msg: '~ Connected to "Public". ~',
+			type: 'notification'
+		});
 	}
 };
