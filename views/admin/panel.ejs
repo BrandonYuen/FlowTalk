@@ -19,10 +19,22 @@
         <div class="input-field col s12">
 			<i class="material-icons prefix">search</i>
             <input name="search" id="search" type="search" value=<%= searchWord %>></input> <label for="search">Search</label>
+        </div>
+        <div class="col s3">
 			<a onclick="searchButton()" class="waves-effect waves-light btn"><b>Search</b></a>
         </div>
-		<ul id="pagination" class="pagination center-align"></ul>
-		<div id="progress" class="progress"></div>
+        <div class="col s3">
+			<% if (adminFilter == true) { %>
+				<input type="checkbox" class="filled-in" id="adminFilter" checked="checked"/>
+			<% }else { %>
+				<input type="checkbox" class="filled-in" id="adminFilter"/>
+			<% } %>
+			<label for="adminFilter">Only Admins</label>
+        </div>
+        <div class="col s12">
+			<ul id="pagination" class="pagination center-align"></ul>
+			<div id="progress" class="progress"></div>
+        </div>
 
 		<table class="striped">
 			<thead>
@@ -46,6 +58,8 @@
 		userCount: <%= pagination.userCount %>
 	};
 	var searchWord = "<%= searchWord %>";
+	var adminFilter = "<%= adminFilter %>";
+	console.log("adminFilter = ",adminFilter);
 </script>
 
 <!-- Inject view specific files for client -->

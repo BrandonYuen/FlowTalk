@@ -150,13 +150,13 @@ module.exports = {
 	* @param  {Function} 	cb
 	*/
 
-	getAllUsers: function (searchWord, page, limit, cb) {
+	getAllUsers: function (adminFilter, searchWord, page, limit, cb) {
 		sails.log.debug("getAllUsers, searchWord: ",searchWord, "page: ",page, "limit: ", limit);
 
 		User.find({
 			or : [
-				{ name: { contains: searchWord } },
-				{ email: { contains: searchWord } }
+				{ name: { contains: searchWord }, isAdmin: adminFilter },
+				{ email: { contains: searchWord }, isAdmin: adminFilter }
 			]
 		})
 		.paginate({page: page, limit: limit})
@@ -177,12 +177,12 @@ module.exports = {
 	* @param  {Function} 	cb
 	*/
 
-	getCount: function (searchWord, limit, cb) {
+	getCount: function (adminFilter, searchWord, limit, cb) {
 
 		User.count({
 			or : [
-				{ name: { contains: searchWord } },
-				{ email: { contains: searchWord } }
+				{ name: { contains: searchWord }, isAdmin: adminFilter },
+				{ email: { contains: searchWord }, isAdmin: adminFilter }
 			]
 		})
 		.exec(function (err, amount){
@@ -190,7 +190,7 @@ module.exports = {
 			if (!amount) return cb (err, 0);
 			else{
 				// Calculate amount of pages based on limit (recordsPerPage)
-				pages = amount / limit;
+				pages = Math.ceil(amount / limit);
 				if (pages < 1){pages = 1};
 				return cb (err, amount, pages);
 			}

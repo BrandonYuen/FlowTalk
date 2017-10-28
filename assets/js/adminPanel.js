@@ -2,7 +2,7 @@
 function getUsersByPage(page) {
 	$.ajax({
 		url: window.location.href+"/loadUsersForAdminPanel",
-		data: {searchWord: searchWord, page: page},
+		data: {adminFilter: adminFilter, searchWord: searchWord, page: page},
 		success: function(result) {
 			console.log("ajax result: ", result);
 
@@ -63,7 +63,7 @@ function getUsersByPage(page) {
 			     $.ajax({
 					type: 'POST',
 			 		url: window.location.href+"/adminToggle",
-			 		data: {userId: userId, isAdmin: boolean},
+			 		data: {userId: userId, isAdmin: boolean, _csrf: _csrf},
 			 		success: function(result) {
 						if (result.response == "OK"){Materialize.toast('Successfully updated user.', 4000);}
 						else {Materialize.toast('Failed to update user.. :(', 4000);}
@@ -74,21 +74,42 @@ function getUsersByPage(page) {
 	});
 }
 
+//On pressing enter while typing in search input
+$("#search").on('keyup', function (e) {
+    if (e.keyCode == 13) {
+        searchButton();
+    }
+});
+
 //Search button
 function searchButton() {
 	//Get search value
 	var searchWord = document.getElementById('search').value;
+	var adminFilter = document.getElementById("adminFilter").checked;
 	console.log("pressed search button with value: ",searchWord);
 
 	//Reload current page with hidden post form containing new search word
     var form = document.createElement('form');
     form.method = 'post';
     form.action = '';
+
     var input = document.createElement('input');
     input.type = 'hidden';
     input.name = 'search';
     input.value = searchWord;
     form.appendChild(input);
+
+    var isAdmin = document.createElement('input');
+    isAdmin.type = 'hidden';
+    isAdmin.name = 'adminFilter';
+    isAdmin.value = adminFilter;
+    form.appendChild(isAdmin);
+
+    var csrf = document.createElement('input');
+    csrf.type = 'hidden';
+    csrf.name = '_csrf';
+    csrf.value = _csrf;
+    form.appendChild(csrf);
 	document.body.appendChild(form);
     form.submit();
 }

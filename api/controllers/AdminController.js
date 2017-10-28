@@ -24,16 +24,19 @@ module.exports = {
 
 			//Get search word param if set, otherwise default to empty string
 			searchWord = req.param('search') || "";
-			sails.log.debug("searchWord",searchWord);
+			adminFilter = req.param('adminFilter') || "false";
+			adminFilter = (adminFilter == 'true'); // Convert to boolean
+			sails.log.debug("searchWord = ",searchWord);
+			sails.log.debug("adminFilter = ",adminFilter);
 
 			//Get count of users and pages for pagination
-			User.getCount(searchWord, limit, function (err, userCount, pageCount) {
+			User.getCount(adminFilter, searchWord, limit, function (err, userCount, pageCount) {
 				if (err) { return res.negotiate(err); }
-
-				sails.log.debug("searchWord after getCount: ", searchWord);
+				console.log("users found = ",userCount);
 
 				return res.view('admin/panel', {
 					searchWord: searchWord,
+					adminFilter: adminFilter,
 					user: user,
 					pagination: {
 						userCount: userCount,
@@ -60,14 +63,16 @@ module.exports = {
 		//Get data parameters from request
 		page = req.param('page');
 		searchWord = req.param('searchWord');
+		adminFilter = req.param('adminFilter') || "false";
+		adminFilter = (adminFilter == 'true'); // Convert to boolean
 		limit = 10; // NOTE: Make limit an configurable option?
 
 		//Get count of users and pages for pagination
-		User.getCount(searchWord, limit, function (err, userCount, pageCount) {
+		User.getCount(adminFilter, searchWord, limit, function (err, userCount, pageCount) {
 			if (err) { return res.negotiate(err); }
 
 			//Get all users for the admin page (or a part of it using pagination / filters)
-			User.getAllUsers(searchWord, page, limit, function (err, users) {
+			User.getAllUsers(adminFilter, searchWord, page, limit, function (err, users) {
 				if (err) { return res.negotiate(err); }
 				if (!users) { return res.serverError(new Error('No users found!')); }
 
