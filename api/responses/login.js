@@ -44,6 +44,7 @@ module.exports = function login(inputs) {
 		req.session.userId = user.id;
 		req.session.isAdmin = user.isAdmin;
 		req.session.lastLogin = user.lastLogin;
+		req.session.username = user.name;
 
 		// If this is not an HTML-wanting browser, e.g. AJAX/sockets/cURL/etc.,
 		// send a 200 response letting the user agent know the login was successful.

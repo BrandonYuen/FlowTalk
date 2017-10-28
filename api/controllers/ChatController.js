@@ -16,7 +16,7 @@ module.exports = {
 		sails.sockets.join(req, 'public');
 
 		// Broadcast to other ALL other sockets in room
-		sails.sockets.broadcast('public', 'newClientConnect', { id: req.socket.id }, req);
+		sails.sockets.broadcast('public', 'newClientConnect', { username: req.session.username }, req);
 
 		// Return connect response
 		return res.json({
@@ -33,16 +33,20 @@ module.exports = {
 
 		// Prepare message data
 		messageData = {
-			msg: ""
+			msg: req.param('msg'),
+			fromSocketId: sails.sockets.getId(req),
+			username: req.session.username
 		};
+
+		sails.log.debug("Received message: ",messageData);
 
 		// Broadcast to other ALL other sockets in room
 		sails.sockets.broadcast('public', 'message', messageData, req);
 
-		// Return connect response
+		// Return success message
 		return res.json({
-			msg: '~ Connected to "Public". ~',
-			type: 'notification'
+			msg: 'Successfully send message!',
+			type: 'confirmation'
 		});
 	}
 };
