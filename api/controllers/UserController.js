@@ -150,6 +150,9 @@ module.exports = {
 				if (err) { return res.negotiate(err); }
 				if (!response) { return res.serverError(new Error('Failed to get response from user update!')); }
 
+				//Update session
+				req.session.username = newName;
+
 				return res.json({
 					response: response
 				});
