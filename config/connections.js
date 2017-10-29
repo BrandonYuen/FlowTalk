@@ -35,9 +35,9 @@ module.exports.connections = {
 	mysqlXAMP: {
 		adapter: 'sails-mysql',
 		host: 'localhost',
-		user: 'root', //optional
-		password: '', //optional
-		database: 'flowtalk' //optional
+		user: 'root',
+		password: '',
+		database: 'flowtalk'
 	},
 
 	/***************************************************************************

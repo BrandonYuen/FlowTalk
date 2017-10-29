@@ -26,12 +26,12 @@ module.exports = {
 			type: 'boolean',
 			defaultsTo: false
 		},
-		isActive: {
-			type: 'boolean',
-			defaultsTo: true
-		},
 		lastLogin: {
 			type: 'datetime'
+		},
+		totalMessages: {
+			type: 'integer',
+			defaultsTo: 0
 		}
 	},
 
@@ -62,7 +62,7 @@ module.exports = {
 	*/
 
 	signup: function (inputs, cb) {
-		sails.log.debug("creating user");
+
 		// Create a user
 		User.create({
 			name: inputs.name,
@@ -86,7 +86,6 @@ module.exports = {
 	*/
 
 	attemptLogin: function (inputs, cb) {
-		sails.log.debug("trying user");
 
 		// Find a user
 		User.findOne({
@@ -102,8 +101,6 @@ module.exports = {
 				//Update lastlogin for user
 				User.update({id:record.id},{lastLogin:new Date()}).exec(function (err, updated){
 					if (err) {sails.log.error(err);}
-
-					sails.log.debug("Updated user ("+record.name+") lastLogin to: ",updated[0].lastLogin);
 				});
 
 				return cb (err, record);
@@ -125,7 +122,6 @@ module.exports = {
 	*/
 
 	getUserById: function (userId, cb) {
-		sails.log.debug("getUserById: "+userId);
 
 		// Find a user
 		User.findOne({
@@ -134,7 +130,6 @@ module.exports = {
 		.exec(function (err, user){
 			if (err || !user) return cb (err);
 			else{
-				sails.log.debug("name: ", user.name);
 				return cb (err, user);
 			}
 		});
@@ -151,7 +146,7 @@ module.exports = {
 	*/
 
 	getAllUsers: function (adminFilter, searchWord, page, limit, cb) {
-		sails.log.debug("getAllUsers, searchWord: ",searchWord, "page: ",page, "limit: ", limit);
+		sails.log.debug("User.getAllUsers > searchWord: ",searchWord, "page: ",page, "limit: ", limit);
 
 		User.find({
 			or : [
@@ -208,7 +203,6 @@ module.exports = {
 	*/
 
 	updateUserById: function (userId, params, cb) {
-		sails.log.debug("updateUserById, params: ",params);
 
 		//Update lastlogin for user
 		User.update({id:userId},params).exec(function (err, updatedRecords){
@@ -217,9 +211,34 @@ module.exports = {
 				return cb(err);
 			}
 
-			sails.log.debug("Updated user (",userId,")'s isAdmin to:", updatedRecords[0].isAdmin);
+			sails.log.debug("User.updateUserById > Updated user (",userId,"):", updatedRecords[0]);
 
 			return cb(err, "OK");
 		});
 	},
+
+	addMessageCount: function (userId, cb) {
+
+		User.findOne({
+			id: userId
+		})
+		.exec(function (err, user) {
+			if (err) {
+				sails.log.error(err);
+				return cb(err);
+			}
+			if (!user) sails.log.error('Could not find user.');
+
+			user.totalMessages += 1;
+			user.save(function (err) {
+				if (err) {
+					sails.log.error(err);
+					return cb(err);
+				}
+				sails.log.debug("User.addMessageCount > Updated user "+user.id+" with totalMessages = "+user.totalMessages);
+				return cb(err, "OK");
+			});
+		});
+
+	}
 };

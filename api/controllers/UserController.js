@@ -94,11 +94,16 @@ module.exports = {
 				return res.negotiate(err);
 			}
 
+			sails.log.debug("UserController.signup > Created new user:", user);
+
 			// Go ahead and log this user in as well.
 			// We do this by "remembering" the user in the session.
 			// Subsequent requests from this user agent will have `req.session.me` set.
 			req.session.authenticated = true;
-			req.session.userid = user.id;
+			req.session.userId = user.id;
+			req.session.isAdmin = user.isAdmin;
+			req.session.lastLogin = user.lastLogin;
+			req.session.username = user.name;
 
 			// If this is not an HTML-wanting browser, e.g. AJAX/sockets/cURL/etc.,
 			// send a 200 response letting the user agent know the signup was successful.
@@ -108,6 +113,47 @@ module.exports = {
 
 			// Otherwise if this is an HTML-wanting browser, redirect to /welcome.
 			return res.redirect('/');
+		});
+	},
+
+
+	/**
+	* `UserController.changeName()`
+	* @description :: Ajax response to change a user's name
+	*
+	* @returns :: json
+	*/
+	changeName: function (req, res) {
+		// If not an AJAX request, redirect back to parent in url (i.e. /admin/loadUsersForAdminPanel -> /admin)
+		if (!req.xhr) {
+			return res.redirect('..');
+		}
+
+		// Get data parameters from request
+		userId = req.session.userId
+		newName = req.param('newName');
+
+		// Get user
+		User.getUserById(userId, function(err, user) {
+		    if (err) { return res.negotiate(err); }
+		    if (!user) { return res.serverError(new Error('Could not find user in session!')); }
+
+			// Check if user has the required amount totalMessages
+			if (user.totalMessages < 10) {
+				return res.json({
+					response: "Error: Not enough total messages (10)."
+				});
+			}
+
+			// Update user with new parameters, new name in this case
+			User.updateUserById(userId, {name: newName}, function (err, response) {
+				if (err) { return res.negotiate(err); }
+				if (!response) { return res.serverError(new Error('Failed to get response from user update!')); }
+
+				return res.json({
+					response: response
+				});
+			});
 		});
 	}
 };

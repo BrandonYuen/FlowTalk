@@ -35,6 +35,11 @@ function getUsersByPage(page) {
 					item.innerHTML = users[u].email;
 					row.appendChild(item);
 
+					//totalMessages
+					var item = document.createElement("td");
+					item.innerHTML = users[u].totalMessages;
+					row.appendChild(item);
+
 					//Admin toggle
 					var item = document.createElement("td");
 					if (users[u].isAdmin == true){

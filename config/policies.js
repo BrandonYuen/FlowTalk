@@ -52,6 +52,7 @@ module.exports.policies = {
 	UserController: {
 		'*': ['sessionAuth', 'isAdmin'],
 		homePage : 'sessionAuth',
+		changeName : 'sessionAuth',
 		loginPage : true,
 		login : true,
 		logout : true,
@@ -60,5 +61,9 @@ module.exports.policies = {
 
 	AdminController: {
 		'*': ['sessionAuth', 'isAdmin']
+	},
+
+	ChatController: {
+		'*': ['sessionAuth']
 	}
 };

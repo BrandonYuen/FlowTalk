@@ -36,7 +36,7 @@ module.exports = function login(inputs) {
 			});
 		}
 
-		sails.log.debug("Successfull login");
+		sails.log.debug("responses/login (UserController.attemptLogin) > Successfully logged in user with Name: '",user.name,"' ID: '",user.id,"'");
 
 		// "Remember" the user in the session
 		// Subsequent requests from this user agent will have `req.session.me` set.

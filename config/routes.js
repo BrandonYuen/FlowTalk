@@ -13,5 +13,7 @@ module.exports.routes = {
 
 	// ajax
 	'post /admin/loadUsersForAdminPanel': 'AdminController.loadUsersForAdminPanel',
-	'post /admin/adminToggle': 'AdminController.adminToggle'
+	'post /admin/adminToggle': 'AdminController.adminToggle',
+
+	'post /changeName': 'UserController.changeName'
 };

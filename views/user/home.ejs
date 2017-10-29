@@ -10,23 +10,31 @@
 			Welcome <b><%= user.name %></b>, to the main chatroom. <br>
 			Last login: <b><%= utility.timeSince(req.session.lastLogin) %> ago</b>
 		</p>
+        <div class="input-field col s12">
+			<i class="material-icons prefix">search</i>
+            <input name="newName" id="newName" type="text" value="<%= user.name %>" <%= ((user.totalMessages < 10) ? "disabled" : "") %>></input> <label for="newName">New username</label>
+        </div>
+        <div class="col s3">
+			<a onclick="updateNameButton()" class="waves-effect waves-light btn" <%= ((user.totalMessages < 10) ? "disabled" : "") %>><b>Update Name</b></a>
+        </div>
 	</div>
 </div>
 
 <div class="row">
 	<div class="col s9">
 		<div class="card">
-		    <div class="card-image waves-effect waves-block waves-light" style="max-height: 200px">
-		  		<img src="images/park.jpg">
-		      <span class="card-title">Public Room's</span>
+		    <div class="card-image waves-effect waves-block waves-light" style="max-height: 100px; text-shadow: 0px 0px 2px rgba(0, 0, 0, 0.8);">
+		  		<img src="images/park.jpg" style="filter: grayscale(20%);">
+		      	<span class="card-title">Public Chatroom</span>
 		    </div>
-			<div class="card-tabs">
-				<ul class="tabs tabs-fixed-width">
-					<li class="tab"><a class="active" href="#publicChat1">Public #1</a></li>
-				</ul>
-			</div>
-			<div class="card-content grey lighten-3" style="min-height: 400px; max-height: 400px">
+			<div class="card-content grey lighten-3" id="chatContainer" style="min-height: 300px; max-height: 300px; overflow: auto;">
 				<div class="chatbox" id="chatbox"></div>
+			</div>
+			<div class="card-action" >
+				<div class="input-field">
+					<input name="messageInput" id="messageInput" type="text"></input> <label for="messageInput">Type a message</label>
+				</div>
+				<div class="btn col s3 waves-effect waves-light" id="sendButton" onclick="sendButton()"><b>Send</b></div>
 			</div>
 		</div>
 	</div>
@@ -36,22 +44,11 @@
 			<span class="white-text"><h6>Users:</h6></span>
 			<div class="divider"></div>
 			<h7>
-				<p>
-					<span class="white-text">BlaBlaBla</span>
+				<p id="userlist">
+					<span class="white-text" id="userInList_<%= user.id %>"><%= user.name %><br/></span>
 				</p>
 			</h7>
 	    </div>
-	</div>
-</div>
-
-<div class="row">
-	<div class="col s6">
-		<div class="card-panel grey lighten-3">
-			<div class="input-field">
-				<input name="messageInput" id="messageInput" type="text"></input> <label for="messageInput">Type a message</label>
-			</div>
-			<div class="btn col s3 waves-effect waves-light" id="sendButton"><b>Send</b></div>
-		</div>
 	</div>
 </div>
 

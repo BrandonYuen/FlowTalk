@@ -26,13 +26,10 @@ module.exports = {
 			searchWord = req.param('search') || "";
 			adminFilter = req.param('adminFilter') || "false";
 			adminFilter = (adminFilter == 'true'); // Convert to boolean
-			sails.log.debug("searchWord = ",searchWord);
-			sails.log.debug("adminFilter = ",adminFilter);
 
 			//Get count of users and pages for pagination
 			User.getCount(adminFilter, searchWord, limit, function (err, userCount, pageCount) {
 				if (err) { return res.negotiate(err); }
-				console.log("users found = ",userCount);
 
 				return res.view('admin/panel', {
 					searchWord: searchWord,
@@ -100,11 +97,11 @@ module.exports = {
 			return res.redirect('..');
 		}
 
-		//Get data parameters from request
+		// Get data parameters from request
 		userId = req.param('userId');
 		isAdmin = req.param('isAdmin');
 
-		//Get all users for the admin page (or a part of it using pagination / filters)
+		// Update user with new parameters, admin permission in this case
 		User.updateUserById(userId, {isAdmin: isAdmin}, function (err, response) {
 			if (err) { return res.negotiate(err); }
 			if (!response) { return res.serverError(new Error('Failed to get response from user update!')); }
